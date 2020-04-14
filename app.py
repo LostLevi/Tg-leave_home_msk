@@ -26,13 +26,21 @@ class Go_work:
         self.org_name = None
         self.bth_date = None
         self.med_org_name = None
-
+        self.exit_reason = None
+        self.exit_addr = None
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    send_mess = 'Начать - /run'
+    send_mess = f"Данный бот создан, что бы помочь сформировать код необходимый для получения пропусков в г. Москва\n\nВозможно код подойдет, также для других областей\n\nЧто бы сформировать код введите команду /run и последовательно заполните все данные\n\nДля дополнительной информации введите команду /about"
     bot.send_message(message.chat.id, send_mess, parse_mode = 'html')
     #bot.register_next_step_handler(sent, Hello)
+
+@bot.message_handler(commands=['about'])
+def start(message):
+    send_mess = f'Бот не использует базу данных и генерирует код в процессе введения данных\nСпасибо за разработку инструмента генерации кодов в Excel пикабушнику Fu1crum\nСсылка на пост - https://pikabu.ru/story/shablon_sms_dlya_propuska_po_moskve_7368626'
+    send = bot.send_message(message.chat.id, send_mess, parse_mode = 'html')
+    bot.register_next_step_handler(send, Step0)
+
 
 @bot.message_handler(commands=['run'])
 def start(message):
@@ -48,7 +56,7 @@ def Step0(message):
         pass_type = '*'
     data = Go_work(name, pass_type)
     work_dict[chat_id] = data
-    send_mess = f"Серия пасспорта (если нет, то отправьте - <b>*</b>)"
+    send_mess = f"Серия паспорта (если нет, то отправьте - <b>*</b>)"
     send = bot.send_message(message.chat.id, send_mess, parse_mode = 'html')
     bot.register_next_step_handler(send, Step1)
 
@@ -59,7 +67,7 @@ def Step1(message):
         pass_ser = '*'
     data = work_dict[chat_id]
     data.pass_ser = pass_ser
-    send_mess = f"Номер пасспорта (если нет, то отправьте - <b>*</b>)"
+    send_mess = f"Номер паспорта (если нет, то отправьте - <b>*</b>)"
     send = bot.send_message(message.chat.id, send_mess, parse_mode = 'html')
     bot.register_next_step_handler(send, Step2)
 
@@ -162,5 +170,23 @@ def Step_med_last(message):
     send_mess = f"Код снизу сформирован из ваших данных, его необходимо копировать и отправить как смс на номер\n<b>7377</b> для жителей Москвы"
     bot.send_message(chat_id, send_mess)
     bot.send_message(chat_id, f"Пропуск*{str(data.step)}{str(data.pass_type)}{str(data.pass_ser)}{str(data.pass_num)}{str(data.bth_date)}{str(data.car_num)}{str(data.troyka_num)}{str(data.strelka_num)}{str(data.med_org_name)}")
+
+def Step_Idk(message):
+    chat_id = message.chat.id
+    exit_reason = str(message.text) + '*'
+    data = work_dict[chat_id]
+    data.exit_reason = exit_reason
+    send_mess = f"Введите краткое адрес места назначения (желательно до 20 символов, без кавычек, или иных спец. символов)"
+    send = bot.send_message(message.chat.id, send_mess, parse_mode = 'html')
+    bot.register_next_step_handler(send, Step_idk_last)
+
+def Step_idk_last(message):
+    chat_id = message.chat.id
+    exit_addr = str(message.text)
+    data = work_dict[chat_id]
+    data.exit_addr = exit_addr
+    send_mess = f"Код снизу сформирован из ваших данных, его необходимо копировать и отправить как смс на номер\n<b>7377</b> для жителей Москвы"
+    bot.send_message(chat_id, send_mess)
+    bot.send_message(chat_id, f"Пропуск*{str(data.step)}{str(data.pass_type)}{str(data.pass_ser)}{str(data.pass_num)}{str(data.car_num)}{str(data.troyka_num)}{str(data.strelka_num)}{str(data.exit_reason)}{str(data.exit_addr)}")
 
 bot.polling(none_stop=True)
