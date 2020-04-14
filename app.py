@@ -151,7 +151,7 @@ def Step_work_last(message):
     data.org_name = org_name
     send_mess = f"Код снизу сформирован из ваших данных, его необходимо копировать и отправить как смс на номер\n<b>7377</b> для жителей Москвы"
     bot.send_message(chat_id, send_mess)
-    bot.send_message(chat_id, f"Пропуск*{str(data.step)}*{str(data.pass_type)}*{str(data.pass_ser)}*{str(data.pass_num)}*{str(data.car_num)}*{str(data.troyka_num)}*{str(data.strelka_num)}*{str(data.inn)}*{str(data.org_name)}")
+    bot.send_message(chat_id, f"Пропуск*{str(data.step)}{str(data.pass_type)}{str(data.pass_ser)}{str(data.pass_num)}{str(data.car_num)}{str(data.troyka_num)}{str(data.strelka_num)}{str(data.inn)}{str(data.org_name)}")
 
 def Step_Med(message):
     chat_id = message.chat.id
