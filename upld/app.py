@@ -194,10 +194,4 @@ def Step_idk_last(message):
     bot.send_message(chat_id, send_mess, parse_mode = 'html')
     bot.send_message(chat_id, f"Пропуск*{str(data.step)}{str(data.pass_type)}{str(data.pass_ser)}{str(data.pass_num)}{str(data.car_num)}{str(data.troyka_num)}{str(data.strelka_num)}{str(data.exit_reason)}{str(data.exit_addr)}", parse_mode = 'html')
 
-try:
-    bot.polling(none_stop=True)
-    
-except Exception:
-		print('Нет соединения с FTP')
-		time.sleep(900)
-		continue
+bot.polling(none_stop=True)
