@@ -196,8 +196,8 @@ def Step_idk_last(message):
 
 try:
     bot.polling(none_stop=True)
-    
+
 except Exception:
-		print('Нет соединения с FTP')
+		print('Нет соединения с API')
 		time.sleep(900)
 		continue
