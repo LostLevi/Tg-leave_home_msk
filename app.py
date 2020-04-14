@@ -43,7 +43,9 @@ def start(message):
 def Step0(message):
     chat_id = message.chat.id
     name = message.from_user.first_name
-    pass_type = message.text
+    pass_type = str(message.text) + '*'
+    if pass_type == '**':
+        pass_type = '*'
     data = Go_work(name, pass_type)
     work_dict[chat_id] = data
     send_mess = f"Серия пасспорта (если нет, то отправьте - <b>*</b>)"
@@ -52,7 +54,9 @@ def Step0(message):
 
 def Step1(message):
     chat_id = message.chat.id
-    pass_ser = message.text
+    pass_ser = str(message.text) + '*'
+    if pass_ser == '**':
+        pass_ser = '*'
     data = work_dict[chat_id]
     data.pass_ser = pass_ser
     send_mess = f"Номер пасспорта (если нет, то отправьте - <b>*</b>)"
@@ -61,7 +65,9 @@ def Step1(message):
 
 def Step2(message):
     chat_id = message.chat.id
-    pass_num = message.text
+    pass_num = str(message.text) + '*'
+    if pass_num == '**':
+        pass_num = '*'
     data = work_dict[chat_id]
     data.pass_num = pass_num
     send_mess = f"Номер машины в формате <b>X999XX777</b>, если используется (если нет, то отправьте - <b>*</b>)"
@@ -70,7 +76,9 @@ def Step2(message):
 
 def Step3(message):
     chat_id = message.chat.id
-    car_num = message.text
+    car_num = str(message.text) + '*'
+    if car_num == '**':
+        car_num = '*'
     data = work_dict[chat_id]
     data.car_num = car_num
     send_mess = f"Номер карты Тройка, при наличии (если нет, то отправьте - <b>*</b>)"
@@ -79,7 +87,9 @@ def Step3(message):
 
 def Step4(message):
     chat_id = message.chat.id
-    troyka_num = message.text
+    troyka_num = str(message.text) + '*'
+    if troyka_num == '**':
+        troyka_num = '*'
     data = work_dict[chat_id]
     data.troyka_num = troyka_num
     send_mess = f"Номер карты Стрелка, при наличиии (если нет, то отправьте - <b>*</b>"
@@ -88,10 +98,12 @@ def Step4(message):
 
 def Step5(message):
     chat_id = message.chat.id
-    strelka_num = message.text
+    strelka_num = str(message.text) + '*'
+    if strelka_num == '**':
+        strelka_num = '*'
     data = work_dict[chat_id]
     data.strelka_num = strelka_num
-    send_mess = f"Вы ввели общие данные, на данный момент необходимо выбрать куда вы направляетесь и отправить соответствующую цифру:\n1. На работу\n2. Разовое посещение мед. организации\n 3. Разовая поездка в иных целях (не более 2х раз в неделю)"
+    send_mess = f"Вы ввели общие данные, на данный момент необходимо выбрать куда вы направляетесь и отправить соответствующую цифру:\n<b>1</b>. На работу\n<b>2</b>. Разовое посещение мед. организации\n<b>3</b>. Разовая поездка в иных целях (не более 2х раз в неделю)"
     send = bot.send_message(message.chat.id, send_mess, parse_mode = 'html')
     bot.register_next_step_handler(send, Step_way)
 
@@ -99,7 +111,7 @@ def Step_way(message):
     chat_id = message.chat.id
     step = message.text
     data = work_dict[chat_id]
-    data.step = step
+    data.step = str(step) + '*'
     if step == '1':
         send_mess = f"Для отправки на работу введите ИНН организации, не обязательно (если нет, то отправьте - <b>*</b>)"
         send = bot.send_message(message.chat.id, send_mess, parse_mode = 'html')
@@ -115,7 +127,9 @@ def Step_way(message):
 
 def Step_Work(message):
     chat_id = message.chat.id
-    inn = message.text
+    inn = str(message.text) + '*'
+    if inn == '**':
+        inn = '*'
     data = work_dict[chat_id]
     data.inn = inn
     send_mess = f"Введите краткое название вашей организации (до 20 символов, без кавычек, или иных спец. символов)"
@@ -124,16 +138,16 @@ def Step_Work(message):
 
 def Step_work_last(message):
     chat_id = message.chat.id
-    org_name = message.text
+    org_name = str(message.text)
     data = work_dict[chat_id]
     data.org_name = org_name
-    send_mess =  f"Код снизу сформирован из ваших данных, его необходимо копировать и отправить как смс на номер\n<b>7377</b> для жителей Москвы"
+    send_mess = f"Код снизу сформирован из ваших данных, его необходимо копировать и отправить как смс на номер\n<b>7377</b> для жителей Москвы"
     bot.send_message(chat_id, send_mess)
     bot.send_message(chat_id, f"Пропуск*{str(data.step)}*{str(data.pass_type)}*{str(data.pass_ser)}*{str(data.pass_num)}*{str(data.car_num)}*{str(data.troyka_num)}*{str(data.strelka_num)}*{str(data.inn)}*{str(data.org_name)}")
 
 def Step_Med(message):
     chat_id = message.chat.id
-    bth_date = message.text
+    bth_date = str(message.text) + '*'
     data = work_dict[chat_id]
     data.bth_date = bth_date
     send_mess = f"Введите краткое название мед. организации (до 20 символов, без кавычек, или иных спец. символов)"
@@ -142,11 +156,11 @@ def Step_Med(message):
 
 def Step_med_last(message):
     chat_id = message.chat.id
-    med_org_name = message.text
+    med_org_name = str(message.text)
     data = work_dict[chat_id]
     data.med_org_name = med_org_name
-    send_mess =  f"Код снизу сформирован из ваших данных, его необходимо копировать и отправить как смс на номер\n<b>7377</b> для жителей Москвы"
+    send_mess = f"Код снизу сформирован из ваших данных, его необходимо копировать и отправить как смс на номер\n<b>7377</b> для жителей Москвы"
     bot.send_message(chat_id, send_mess)
-    bot.send_message(chat_id, f"Пропуск*{str(data.step)}*{str(data.pass_type)}*{str(data.pass_ser)}*{str(data.pass_num)}*{str(data.bth_date)}*{str(data.car_num)}*{str(data.troyka_num)}*{str(data.strelka_num)}*{str(data.med_org_name)}")
+    bot.send_message(chat_id, f"Пропуск*{str(data.step)}{str(data.pass_type)}{str(data.pass_ser)}{str(data.pass_num)}{str(data.bth_date)}{str(data.car_num)}{str(data.troyka_num)}{str(data.strelka_num)}{str(data.med_org_name)}")
 
 bot.polling(none_stop=True)
